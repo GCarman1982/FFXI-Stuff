@@ -37,7 +37,7 @@ function user_setup()
         These are for when you are fighting with or without Pet
         When you are IDLE and Pet is ENGAGED that is handled by the Idle Sets
     ]]
-    state.OffenseMode:options("MasterPet", "Master", "Trusts")
+    state.OffenseMode:options("MasterPet", "Master")
 
     --[[
         Ctrl-F9 - Cycle Hybrid Mode (the defensive half of all 'hybrid' melee modes).
@@ -149,8 +149,8 @@ function user_setup()
         This will toggle the CP Mode 
         //gs c toggle CP 
     ]] 
-    state.CP = M(false, "CP") 
-    CP_CAPE = "Aptitude Mantle +1" 
+    state.CP = M(false, "CP")
+    CP_CAPE = "Aptitude Mantle +1"
 
     --[[
         Enter the slots you would lock based on a custom set up.
@@ -178,6 +178,7 @@ function user_setup()
     send_command("bind = gs c clear")
 
     select_default_macro_book()
+    set_lockstyle()
 
     -- Adjust the X (horizontal) and Y (vertical) position here to adjust the window
     pos_x = 0
@@ -204,6 +205,7 @@ end
 
 function job_setup()
     include("PUP-LIB.lua")
+    include('organizer-lib')
     lockstyleset = 1
 end
 
@@ -255,24 +257,27 @@ function init_gear_sets()
     Empy_Karagoz.Feet_Tatical = "Karagoz Scarpe +1"
 
     Visucius = {}
-    Visucius.PetDT = {
-        name = "Visucius's Mantle",
-        augments = {
-            "Pet: Acc.+20 Pet: R.Acc.+20 Pet: Atk.+20 Pet: R.Atk.+20",
-            "Accuracy+20 Attack+20",
-            "Pet: Accuracy+4 Pet: Rng. Acc.+4",
-            'Pet: "Regen"+10',
-            "Pet: Damage taken -5%"
+    Visucius.PetDD = {
+        name="Visucius's Mantle",
+        augments={'Pet: Acc.+20 Pet: R.Acc.+20 Pet: Atk.+20 Pet: R.Atk.+20',
+        'Pet: Accuracy+10 Pet: Rng. Acc.+10',
+        'Pet: Haste+10'
         }
     }
-    Visucius.PetMagic = {
-        name = "Visucius's Mantle",
-        augments = {
-            "Pet: Acc.+20 Pet: R.Acc.+20 Pet: Atk.+20 Pet: R.Atk.+20",
-            "Accuracy+20 Attack+20",
-            "Pet: Accuracy+4 Pet: Rng. Acc.+4",
-            'Pet: "Regen"+10',
-            "Pet: Damage taken -5%"
+    Visucius.PetRegen = {
+        name="Visucius's Mantle",
+        augments={'Pet: Acc.+20 Pet: R.Acc.+20 Pet: Atk.+20 Pet: R.Atk.+20',
+        'Accuracy+10 Attack+10',
+        'Pet: Attack+6 Pet: Rng.Atk.+6','Pet: "Regen"+10',
+        'Pet: Magic dmg. taken-10%'
+        }
+    }
+    Visucius.Master = {
+        name="Visucius's Mantle",
+        augments={'STR+20',
+        'Accuracy+20 Attack+20',
+        'STR+10',
+        'Weapon skill damage +10%'
         }
     }
 
@@ -291,7 +296,18 @@ function init_gear_sets()
         Will be activated when Pet is not active, otherwise refer to sets.idle.Pet
     ]]
     sets.idle = {
-        
+        head="Nyame Helm",
+        body="Nyame Mail",
+        hands="Mpaca's Gloves",
+        legs="Nyame Flanchard",
+        feet="Hermes' Sandals",
+        neck="Twilight Torque",
+        waist="Isa Belt",
+        left_ear="Genmei Earring",
+        right_ear="Infused Earring",
+        left_ring="Fortified Ring",
+        right_ring="Defending Ring",
+        back="Contriver's Cape"
     }
 
     -------------------------------------Fastcast
@@ -338,7 +354,7 @@ function init_gear_sets()
         back = "Visucius's Mantle"
     }
 
-    sets.precast.JA["Activate"] = {back = "Visucius's Mantle", hands = "Mpaca's Boots"}
+    sets.precast.JA["Activate"] = {back = "Visucius's Mantle", feet = "Mpaca's Boots"}
 
     sets.precast.JA["Deus Ex Automata"] = sets.precast.JA["Activate"]
 
@@ -355,39 +371,70 @@ function init_gear_sets()
     -- Weaponskill sets
     -- Default set for any weaponskill that isn't any more specifically defined
     sets.precast.WS = {
-        head="Malignance Chapeau",
+        head="Mpaca's Cap",
         body="Foire Tobe +2",
-        hands={ name="Herculean Gloves", augments={'"Mag.Atk.Bns."+5','Weapon skill damage +5%','INT+9',}},
+        hands={ name="Herculean Gloves", augments={'"Mag.Atk.Bns."+5','Weapon skill damage +5%','INT+9'}},
         legs="Hiza. Hizayoroi +2",
         feet="Mpaca's Boots",
         neck="Shulmanu Collar",
         waist="Grunfeld Rope",
         left_ear="Ishvara Earring",
         right_ear="Cessance Earring",
-        left_ring="Niqmaddu Ring",
-        right_ring="Rufescent Ring",
-        back={ name="Visucius's Mantle", augments={'STR+20','Accuracy+20 Attack+20','STR+10','Weapon skill damage +10%',}}
+        left_ring="Refescent Ring",
+        right_ring="Niqmaddu Ring",
+        back=Visucius.Master
     }
 
     -- Specific weaponskill sets.  Uses the base set if an appropriate WSMod version isn't found.
     sets.precast.WS["Stringing Pummel"] = set_combine(sets.precast.WS, {
-        waist="Fotia Belt"
+        head="Mpaca's Cap",
+        body="Mpaca's Doublet",
+        hands="Mpaca's Gloves",
+        legs="Mpaca's Hose",
+        feet="Mpaca's Boots",
+        neck="Shulmanu Collar",
+        waist="Fotia Belt",
+        left_ear="Moonshade Earring",
+        right_ear="Cessance Earring",
+        left_ring="Refescent Ring",
+        right_ring="Niqmaddu Ring"
     })
 
-    sets.precast.WS["Stringing Pummel"].Mod = set_combine(sets.precast.WS, {})
+    sets.precast.WS["Stringing Pummel"].Mod = set_combine(sets.precast.WS["Stringing Pummel"], {})
 
-    sets.precast.WS["Victory Smite"] = set_combine(sets.precast.WS, {})
+    sets.precast.WS["Victory Smite"] = set_combine(sets.precast.WS, {
+        head="Mpaca's Cap",
+        body="Mpaca's Doublet",
+        hands="Mpaca's Gloves",
+        legs="Mpaca's Hose",
+        feet="Mpaca's Boots",
+        neck="Shulmanu Collar",
+        left_ear="Moonshade Earring",
+        right_ear="Cessance Earring",
+        left_ring="Refescent Ring",
+        right_ring="Niqmaddu Ring"
+    })
 
-    sets.precast.WS["Shijin Spiral"] =
-        set_combine(
-        sets.precast.WS, {
-            waist= "Fotia Belt",
-            right_ear = "Moonshade Earring"
-        }
+    sets.precast.WS["Shijin Spiral"] = set_combine(sets.precast.WS,
+    {
+        head="Mpaca's Cap",
+        body="Mpaca's Doublet",
+        hands="Mpaca's Gloves",
+        legs="Mpaca's Hose",
+        feet="Mpaca's Boots",
+        neck="Shulmanu Collar",
+        waist="Fotia Belt",
+        left_ear="Moonshade Earring",
+        right_ear="Cessance Earring",
+        left_ring="Refescent Ring",
+        right_ring="Niqmaddu Ring"
+    })
 
-    )
-
-    sets.precast.WS["Howling Fist"] = set_combine(sets.precast.WS, {})
+    sets.precast.WS["Howling Fist"] = set_combine(sets.precast.WS, {
+        head="Mpaca's Cap",
+        body="Nyame Mail",
+        feet="Nyame Sollerets"
+    })
 
     -------------------------------------Idle
     --[[
@@ -426,7 +473,7 @@ function init_gear_sets()
         right_ear="Cessance Earring",
         left_ring="Hetairoi Ring",
         right_ring="Niqmaddu Ring",
-        back={ name="Visucius's Mantle", augments={'STR+20','Accuracy+20 Attack+20','STR+10','Weapon skill damage +10%',}}
+        back=Visucius.Master
     }
 
     -------------------------------------Acc
@@ -446,7 +493,7 @@ function init_gear_sets()
         right_ear="Digni. Earring",
         left_ring="Hizamaru Ring",
         right_ring="Tali'ah Ring",
-        back={ name="Visucius's Mantle", augments={'STR+20','Accuracy+20 Attack+20','STR+10','Weapon skill damage +10%',}}
+        back=Visucius.Master
     }
 
     -------------------------------------TP
@@ -454,9 +501,7 @@ function init_gear_sets()
         Offense Mode = Master
         Hybrid Mode = TP
     ]]
-    sets.engaged.Master.TP = {
-       set_combine(sets.engaged.Master, {})
-    }
+    sets.engaged.Master.TP = set_combine(sets.engaged.Master, {})
 
     -------------------------------------DT
     --[[
@@ -494,18 +539,14 @@ function init_gear_sets()
         Offense Mode = MasterPet
         Hybrid Mode = Normal
     ]]
-    sets.engaged.MasterPet = {
-       set_combine(sets.engaged.Master, {})
-    }
+    sets.engaged.MasterPet = set_combine(sets.engaged.Master, {})
 
     -------------------------------------Acc
     --[[
         Offense Mode = MasterPet
         Hybrid Mode = Acc
     ]]
-    sets.engaged.MasterPet.Acc = {
-       set_combine(sets.engaged.Master.Acc, {})
-    }
+    sets.engaged.MasterPet.Acc = set_combine(sets.engaged.Master.Acc, {})
 
     -------------------------------------TP
     --[[
@@ -513,7 +554,18 @@ function init_gear_sets()
         Hybrid Mode = TP
     ]]
     sets.engaged.MasterPet.TP = {
-       set_combine(sets.engaged.Master.TP, {})
+        head="Heyoka Cap",
+        body="Mpaca's Doublet",
+        hands="Heyoka Mittens",
+        legs="Heyoka Subligar",
+        feet="Mpaca's Boots",
+        neck="Shulmanu Collar",
+        waist="Klouskap Sash",
+        left_ear="Telos Earring",
+        right_ear="Cessance Earring",
+        left_ring="Hetairoi Ring",
+        right_ring="Niqmaddu Ring",
+        back=Visucius.PetDD
     }
 
     -------------------------------------DT
@@ -521,9 +573,9 @@ function init_gear_sets()
         Offense Mode = MasterPet
         Hybrid Mode = DT
     ]]
-    sets.engaged.MasterPet.DT = {
-       set_combine(sets.engaged.Master.DT, {})
-    }
+    sets.engaged.MasterPet.DT = set_combine(sets.engaged.Master.DT, {
+        back=Visucius.PetRegen
+       })
 
     -------------------------------------Regen
     --[[
@@ -592,7 +644,7 @@ function init_gear_sets()
         body="Mpaca's Doublet",
         hands="Mpaca's Gloves",
         legs="Mpaca's Hose",
-        feet="Mpaca's Boots",
+        feet="Hermes' Boots",
         neck="Shulmanu Collar",
         waist="Klouskap Sash",
         left_ear="Telos Earring",
@@ -609,10 +661,7 @@ function init_gear_sets()
 
         Idle Mode = MasterDT
     ]]
-    sets.idle.Pet.MasterDT = {
-       set_combine(sets.idle.Pet, {})
-    }
-
+    sets.idle.Pet.MasterDT = set_combine(sets.idle.Pet, {})
     -------------------------------------Enmity
     sets.pet = {} -- Not Used
 
@@ -659,7 +708,7 @@ function init_gear_sets()
         right_ear="Handler's Earring +1",
         left_ring="Thurandaut Ring",
         right_ring="Varar Ring",
-        back={ name="Visucius's Mantle", augments={'Pet: Acc.+20 Pet: R.Acc.+20 Pet: Atk.+20 Pet: R.Atk.+20','Pet: Accuracy+10 Pet: Rng. Acc.+10','Pet: Haste+10',}}
+        back=Visucius.PetDD
     }
 
     --[[
@@ -678,7 +727,7 @@ function init_gear_sets()
         right_ear="Handler's Earring +1",
         left_ring="Thurandaut Ring",
         right_ring="Varar Ring",
-        back={ name="Visucius's Mantle", augments={'Pet: Acc.+20 Pet: R.Acc.+20 Pet: Atk.+20 Pet: R.Atk.+20','Pet: Accuracy+10 Pet: Rng. Acc.+10','Pet: Haste+10',}}
+        back=Visucius.PetDD
     }
 
     --[[
@@ -693,11 +742,9 @@ function init_gear_sets()
         Idle Mode = Idle
         Hybrid Mode = DT
     ]]
-    sets.idle.Pet.Engaged.DT = {
-       set_combine(sets.idle.Pet.Engaged, {
-        back={ name="Visucius's Mantle", augments={'Pet: Acc.+20 Pet: R.Acc.+20 Pet: Atk.+20 Pet: R.Atk.+20','Accuracy+10 Attack+10','Pet: Attack+6 Pet: Rng.Atk.+6','Pet: "Regen"+10','Pet: Magic dmg. taken-10%',}}
+    sets.idle.Pet.Engaged.DT = set_combine(sets.idle.Pet.Engaged, {
+        back=Visucius.PetRegen
        })
-    }
 
     --[[
         Idle Mode = Idle
@@ -744,7 +791,20 @@ function init_gear_sets()
         Base Weapon Skill Set
         Used by default if no modifier is found
     ]]
-    sets.midcast.Pet.WS = {}
+    sets.midcast.Pet.WS = {
+        head = Empy_Karagoz.Head_PTPBonus,
+        body="Nyame Mail",
+        hands="Mpaca's Gloves",
+        legs="Nyame Flanchard",
+        feet="Mpaca's Boots",
+        neck="Shulmanu Collar",
+        waist="Klouskap Sash",
+        left_ear="Burana Earring",
+        right_ear="Handler's Earring +1",
+        left_ring="Thurandaut Ring",
+        right_ring="Varar Ring",
+        back=Visucius.PetDD
+    }
 
     --Chimera Ripper, String Clipper
     sets.midcast.Pet.WS["STR"] = set_combine(sets.midcast.Pet.WSNoFTP, {})
@@ -785,6 +845,7 @@ function init_gear_sets()
     ---------------------------------------------
     -- Town Set
     sets.idle.Town = {
+       body = "Councilor's Garb",
        feet = "Hermes' Sandals"
     }
 
@@ -816,6 +877,15 @@ end
 
 -- Lockstyle set on load
 function set_lockstyle()
+    if player.sub_job == "WAR" then
+        lockstyleset = 1
+    elseif player.sub_job == "NIN" then
+        lockstyleset = 1
+    elseif player.sub_job == "DNC" then
+        lockstyleset = 1
+    else
+        lockstyleset = 3
+    end
     send_command('wait 2; input /lockstyleset ' .. lockstyleset)
 end
 
