@@ -45,7 +45,7 @@ function user_setup()
         Used when you are Engaged with Pet
         Used when you are Idle and Pet is Engaged
     ]]
-    state.HybridMode:options("Normal", "Acc", "TP", "DT", "Regen", "Ranged")
+    state.HybridMode:options("Normal", "Tank", "Acc", "TP", "DT", "Regen", "Ranged")
 
     --[[
         Alt-F12 - Turns off any emergency mode
@@ -150,7 +150,7 @@ function user_setup()
         //gs c toggle CP 
     ]] 
     state.CP = M(false, "CP")
-    CP_CAPE = "Aptitude Mantle +1"
+    CP_CAPE = gear.Capacity_Cape
 
     --[[
         Enter the slots you would lock based on a custom set up.
@@ -207,6 +207,9 @@ function job_setup()
     include("PUP-LIB.lua")
     include('organizer-lib')
     lockstyleset = 1
+
+    no_swap_gear = S{"Warp Ring", "Dim. Ring (Dem)", "Dim. Ring (Holla)", "Dim. Ring (Mea)",
+              "Trizek Ring", "Echad Ring", "Facility Ring", "Capacity Ring"}
 end
 
 function init_gear_sets()
@@ -229,9 +232,10 @@ function init_gear_sets()
         This section is best ultilized for defining gear that is used among multiple sets
         You can simply use or ignore the below
     ]]
-    Animators = {}
+    Animators = {"Animator P", "Animator P II", "Neo Animator"}
     Animators.Range = "Animator P II"
     Animators.Melee = "Animator P"
+    Animators.WS = "Neo Animator"
 
     --Adjust to your reforge level
     --Sets up a Key, Value Pair
@@ -253,8 +257,8 @@ function init_gear_sets()
     Empy_Karagoz.Head_PTPBonus = "Karagoz Capello"
     Empy_Karagoz.Body_Overload = "Karagoz Farsetto"
     Empy_Karagoz.Hands = "Karagoz Guanti"
-    Empy_Karagoz.Legs_Combat = "Karagoz Pantaloni +1"
-    Empy_Karagoz.Feet_Tatical = "Karagoz Scarpe +1"
+    Empy_Karagoz.Legs_Combat = "Karagoz Pantaloni"
+    Empy_Karagoz.Feet_Tatical = "Cirque Scarpe +1"
 
     Visucius = {}
     Visucius.PetDD = {
@@ -296,17 +300,17 @@ function init_gear_sets()
         Will be activated when Pet is not active, otherwise refer to sets.idle.Pet
     ]]
     sets.idle = {
-        head="Nyame Helm",
-        body="Nyame Mail",
-        hands="Mpaca's Gloves",
-        legs="Nyame Flanchard",
-        feet="Hermes' Sandals",
-        neck="Twilight Torque",
+        head=gear.Nyame_head,
+        body=gear.Nyame_body,
+        hands=gear.Nyame_hands,
+        legs=gear.Nyame_legs,
+        feet=gear.MovSpd_hermes_feet,
+        neck=gear.DT_Twilight_Torque,
         waist="Isa Belt",
         left_ear="Genmei Earring",
         right_ear="Infused Earring",
         left_ring="Fortified Ring",
-        right_ring="Defending Ring",
+        right_ring=gear.DT_Defending_Ring,
         back="Contriver's Cape"
     }
 
@@ -326,7 +330,7 @@ function init_gear_sets()
     sets.Kiting = {feet = "Hermes' Sandals"}
 
     -------------------------------------JA
-    sets.precast.FC.Utsusemi = set_combine(sets.precast.FC, {neck = "Magoraga Beads", body = "Passion Jacket"})
+    sets.precast.FC.Utsusemi = set_combine(sets.precast.FC, {neck = gear.Utsusemi_Neck, body = "Passion Jacket"})
 
     -- Precast sets to enhance JAs
     sets.precast.JA = {} -- Can be left empty
@@ -348,13 +352,13 @@ function init_gear_sets()
 
     sets.precast.JA.Maneuver = {
         neck = "Buffoon's Collar",
-        body = "Karagoz Farsetto",
+        body = gear.Empy_Karagoz.Body_Overload,
         hands = Artifact_Foire.Hands_Mane_Overload,
         ear1 = "Burana Earring",
         back = "Visucius's Mantle"
     }
 
-    sets.precast.JA["Activate"] = {back = "Visucius's Mantle", feet = "Mpaca's Boots"}
+    sets.precast.JA["Activate"] = {back = "Visucius's Mantle", feet=gear.Mpaca_feet}
 
     sets.precast.JA["Deus Ex Automata"] = sets.precast.JA["Activate"]
 
@@ -371,11 +375,12 @@ function init_gear_sets()
     -- Weaponskill sets
     -- Default set for any weaponskill that isn't any more specifically defined
     sets.precast.WS = {
-        head="Mpaca's Cap",
-        body="Foire Tobe +2",
-        hands={ name="Herculean Gloves", augments={'"Mag.Atk.Bns."+5','Weapon skill damage +5%','INT+9'}},
+        range=Animator.WS,
+        head=gear.Mpaca_head,
+        body=Artifact_Foire.Body_WSD_PTank,
+        hands=gear.Herc_Ws_MAB_hands,
         legs="Hiza. Hizayoroi +2",
-        feet="Mpaca's Boots",
+        feet=gear.Mpaca_feet,
         neck="Shulmanu Collar",
         waist="Grunfeld Rope",
         left_ear="Ishvara Earring",
@@ -387,13 +392,13 @@ function init_gear_sets()
 
     -- Specific weaponskill sets.  Uses the base set if an appropriate WSMod version isn't found.
     sets.precast.WS["Stringing Pummel"] = set_combine(sets.precast.WS, {
-        head="Mpaca's Cap",
-        body="Mpaca's Doublet",
-        hands="Mpaca's Gloves",
-        legs="Mpaca's Hose",
-        feet="Mpaca's Boots",
+        head=gear.Mpaca_head,
+        body=gear.Mpaca_body,
+        hands=gear.Mpaca_hands,
+        legs=gear.Mpaca_legs,
+        feet=gear.Mpaca_feet,
         neck="Shulmanu Collar",
-        waist="Fotia Belt",
+        waist=gear.Elemental_belt,
         left_ear="Moonshade Earring",
         right_ear="Cessance Earring",
         left_ring="Refescent Ring",
@@ -403,11 +408,11 @@ function init_gear_sets()
     sets.precast.WS["Stringing Pummel"].Mod = set_combine(sets.precast.WS["Stringing Pummel"], {})
 
     sets.precast.WS["Victory Smite"] = set_combine(sets.precast.WS, {
-        head="Mpaca's Cap",
-        body="Mpaca's Doublet",
-        hands="Mpaca's Gloves",
-        legs="Mpaca's Hose",
-        feet="Mpaca's Boots",
+        head=gear.Mpaca_head,
+        body=gear.Mpaca_body,
+        hands=gear.Mpaca_hands,
+        legs=gear.Mpaca_legs,
+        feet=gear.Mpaca_feet,
         neck="Shulmanu Collar",
         left_ear="Moonshade Earring",
         right_ear="Cessance Earring",
@@ -417,13 +422,13 @@ function init_gear_sets()
 
     sets.precast.WS["Shijin Spiral"] = set_combine(sets.precast.WS,
     {
-        head="Mpaca's Cap",
-        body="Mpaca's Doublet",
-        hands="Mpaca's Gloves",
-        legs="Mpaca's Hose",
-        feet="Mpaca's Boots",
+        head=gear.Mpaca_head,
+        body=gear.Mpaca_body,
+        hands=gear.Mpaca_hands,
+        legs=gear.Mpaca_legs,
+        feet=gear.Mpaca_feet,
         neck="Shulmanu Collar",
-        waist="Fotia Belt",
+        waist=gear.Elemental_belt,
         left_ear="Moonshade Earring",
         right_ear="Cessance Earring",
         left_ring="Refescent Ring",
@@ -431,9 +436,9 @@ function init_gear_sets()
     })
 
     sets.precast.WS["Howling Fist"] = set_combine(sets.precast.WS, {
-        head="Mpaca's Cap",
-        body="Nyame Mail",
-        feet="Nyame Sollerets"
+        head=gear.Mpaca_head,
+        body=gear.Nyame_body,
+        feet=gear.Nyame_feet
     })
 
     -------------------------------------Idle
@@ -442,17 +447,17 @@ function init_gear_sets()
         Idle Mode = MasterDT
     ]]
     sets.idle.MasterDT = {
-        head="Nyame Helm",
-        body="Nyame Mail",
-        hands="Mpaca's Gloves",
-        legs="Nyame Flanchard",
-        feet="Nyame Sollerets",
-        neck="Twilight Torque",
+        head=gear.Nyame_head,
+        body=gear.Nyame_body,
+        hands=gear.Nyame_hands,
+        legs=gear.Nyame_legs,
+        feet=gear.Nyame_feet,
+        neck=gear.DT_Twilight_Torque,
         waist="Isa Belt",
         left_ear="Genmei Earring",
         right_ear="Infused Earring",
         left_ring="Fortified Ring",
-        right_ring="Defending Ring",
+        right_ring=gear.DT_Defending_Ring,
         back="Contriver's Cape"
     }
 
@@ -462,11 +467,11 @@ function init_gear_sets()
         Hybrid Mode = Normal
     ]]
     sets.engaged.Master = {
-        head="Mpaca's Cap",
-        body="Mpaca's Doublet",
-        hands="Mpaca's Gloves",
-        legs="Mpaca's Hose",
-        feet="Mpaca's Boots",
+        head=gear.Mpaca_head,
+        body=gear.Mpaca_body,
+        hands=gear.Mpaca_hands,
+        legs=gear.Mpaca_legs,
+        feet=gear.Mpaca_feet,
         neck="Shulmanu Collar",
         waist="Klouskap Sash",
         left_ear="Telos Earring",
@@ -482,11 +487,11 @@ function init_gear_sets()
         Hybrid Mode = Acc
     ]]
     sets.engaged.Master.Acc = {
-        head="Malignance Chapeau",
-        body="Mpaca's Doublet",
-        hands="Mpaca's Gloves",
-        legs="Mpaca's Hose",
-        feet="Mpaca's Boots",
+        head=gear.Malignance_head,
+        body=gear.Mpaca_body,
+        hands=gear.Mpaca_hands,
+        legs=gear.Mpaca_legs,
+        feet=gear.Mpaca_feet,
         neck="Shulmanu Collar",
         waist="Grunfeld Rope",
         left_ear="Telos Earring",
@@ -509,12 +514,12 @@ function init_gear_sets()
         Hybrid Mode = DT
     ]]
     sets.engaged.Master.DT = {
-        head="Nyame Helm",
-        body="Nyame Mail",
-        hands="Mpaca's Gloves",
-        legs="Nyame Flanchard",
-        feet="Nyame Sollerets",
-        neck="Twilight Torque",
+        head=gear.Nyame_head,
+        body=gear.Nyame_body,
+        hands=gear.Nyame_hands,
+        legs=gear.Nyame_legs,
+        feet=gear.Nyame_feet,
+        neck=gear.DT_Twilight_Torque,
         waist="Isa Belt",
         left_ear="Telos Earring",
         right_ear="Digni. Earring",
@@ -554,11 +559,11 @@ function init_gear_sets()
         Hybrid Mode = TP
     ]]
     sets.engaged.MasterPet.TP = {
-        head="Heyoka Cap",
-        body="Mpaca's Doublet",
-        hands="Heyoka Mittens",
-        legs="Heyoka Subligar",
-        feet="Mpaca's Boots",
+        head=gear.Heyoka_head,
+        body=gear.Mpaca_body,
+        hands=gear.Heyoka_hands,
+        legs=gear.Heyoka_legs,
+        feet=gear.Mpaca_feet,
         neck="Shulmanu Collar",
         waist="Klouskap Sash",
         left_ear="Telos Earring",
@@ -640,11 +645,11 @@ function init_gear_sets()
         Idle Mode = Idle
     ]]
     sets.idle.Pet = {
-        head="Mpaca's Cap",
-        body="Mpaca's Doublet",
-        hands="Mpaca's Gloves",
-        legs="Mpaca's Hose",
-        feet="Hermes' Boots",
+        head=gear.Mpaca_head,
+        body=gear.Mpaca_body,
+        hands=gear.Mpaca_hands,
+        legs=gear.Mpaca_legs,
+        feet=gear.MovSpd_hermes_feet,
         neck="Shulmanu Collar",
         waist="Klouskap Sash",
         left_ear="Telos Earring",
@@ -667,11 +672,11 @@ function init_gear_sets()
 
     --Equipped automatically
     sets.pet.Enmity = {
-        head="Heyoka Cap",
-        body="Heyoka Harness",
-        hands="Heyoka Mittens",
-        legs="Heyoka Subligar",
-        feet="Heyoka Leggings",
+        head=gear.Heyoka_head,
+        body=gear.Heyoka_body,
+        hands=gear.Heyoka_hands,
+        legs=gear.Heyoka_legs,
+        feet=gear.Heyoka_feet,
         left_ear="Rimeice Earring",
     }
 
@@ -697,14 +702,14 @@ function init_gear_sets()
         Hybrid Mode = Normal
     ]]
     sets.idle.Pet.Engaged = {
-        head="Foire Taj +1",
-        body={ name="Taeon Tabard", augments={'Pet: Accuracy+22 Pet: Rng. Acc.+22','Pet: "Dbl. Atk."+5','Pet: Damage taken -3%',}},
-        hands={ name="Taeon Gloves", augments={'Pet: Accuracy+17 Pet: Rng. Acc.+17','Pet: "Dbl. Atk."+5','Pet: Damage taken -3%',}},
-        legs={ name="Taeon Tights", augments={'Pet: Accuracy+21 Pet: Rng. Acc.+21','Pet: "Dbl. Atk."+5','Pet: Damage taken -3%',}},
-        feet={ name="Taeon Boots", augments={'Pet: Attack+20 Pet: Rng.Atk.+20','Pet: "Dbl. Atk."+4','Pet: Damage taken -4%',}},
+        head=gear.Mpaca_head,
+        body=gear.Mpaca_body,
+        hands=gear.Mpaca_hands,
+        legs=gear.Mpaca_legs,
+        feet=gear.Mpaca_feet,
         neck="Shulmanu Collar",
         waist="Klouskap Sash",
-        left_ear="Rimeice Earring",
+        left_ear="Burana Earring",
         right_ear="Handler's Earring +1",
         left_ring="Thurandaut Ring",
         right_ring="Varar Ring",
@@ -713,21 +718,28 @@ function init_gear_sets()
 
     --[[
         Idle Mode = Idle
+        Hybrid Mode = Tank
+    ]]
+    sets.idle.Pet.Engaged.Tank = {
+         head=Artifact_Foire.Head_PRegen,
+         body=gear.Taeon_pet_body,
+         hands=gear.Taeon_pet_hands,
+         legs=gear.Taeon_pet_legs,
+         feet=gar.Taeon_pet_feet,
+         neck="Shulmanu Collar",
+         waist="Klouskap Sash",
+         left_ear="Rimeice Earring",
+         right_ear="Handler's Earring +1",
+         left_ring="Thurandaut Ring",
+         right_ring="Varar Ring",
+         back=Visucius.PetDD
+    }
+
+    --[[
+        Idle Mode = Idle
         Hybrid Mode = Acc
     ]]
     sets.idle.Pet.Engaged.Acc = {
-        head="Mpaca's Cap",
-        body="Mpaca's Doublet",
-        hands="Mpaca's Gloves",
-        legs="Mpaca's Hose",
-        feet="Mpaca's Boots",
-        neck="Shulmanu Collar",
-        waist="Klouskap Sash",
-        left_ear="Burana Earring",
-        right_ear="Handler's Earring +1",
-        left_ring="Thurandaut Ring",
-        right_ring="Varar Ring",
-        back=Visucius.PetDD
     }
 
     --[[
@@ -742,7 +754,7 @@ function init_gear_sets()
         Idle Mode = Idle
         Hybrid Mode = DT
     ]]
-    sets.idle.Pet.Engaged.DT = set_combine(sets.idle.Pet.Engaged, {
+    sets.idle.Pet.Engaged.DT = set_combine(sets.idle.Pet.Engaged.Tank, {
         back=Visucius.PetRegen
        })
 
@@ -774,8 +786,7 @@ function init_gear_sets()
         WSNoFTP is the default weaponskill set used
     ]]
     sets.midcast.Pet.WSNoFTP = {
-        head = Empy_Karagoz.Head_PTPBonus,
-       -- Add your set here
+        head = Empy_Karagoz.Head_PTPBonus
     }
 
     --[[
@@ -783,8 +794,7 @@ function init_gear_sets()
         then this set will be equipped
     ]]
     sets.midcast.Pet.WSFTP = {
-        head = Empy_Karagoz.Head_PTPBonus,
-       -- Add your set here
+        head = Empy_Karagoz.Head_PTPBonus
     }
 
     --[[
@@ -792,11 +802,11 @@ function init_gear_sets()
         Used by default if no modifier is found
     ]]
     sets.midcast.Pet.WS = {
-        head = Empy_Karagoz.Head_PTPBonus,
-        body="Nyame Mail",
-        hands="Mpaca's Gloves",
-        legs="Nyame Flanchard",
-        feet="Mpaca's Boots",
+        head=Empy_Karagoz.Head_PTPBonus,
+        body=gear.Nyame_body,
+        hands=gear.Mpaca_hands,
+        legs=gear.Nyame_hands,
+        feet=gear.Mpaca_feet,
         neck="Shulmanu Collar",
         waist="Klouskap Sash",
         left_ear="Burana Earring",
@@ -845,9 +855,12 @@ function init_gear_sets()
     ---------------------------------------------
     -- Town Set
     sets.idle.Town = {
-       body = "Councilor's Garb",
-       feet = "Hermes' Sandals"
+       feet = gear.MovSpd_hermes_feet
     }
+
+    sets.idle.Town.Adoulin = set_combine(sets.idle.Town, {
+        body = gear.MovSpd_adoulin_body
+    })
 
     -- Resting sets
     sets.resting = {
@@ -860,6 +873,36 @@ function init_gear_sets()
 
     sets.defense.PetMDT = set_combine(sets.pet.EmergencyDT, {})
 end
+
+function job_handle_update(playerStatus, eventArgs)
+    check_gear()
+end
+
+function check_gear()
+    if no_swap_gear:contains(player.equipment.left_ring) then
+        disable("ring1")
+    else
+        enable("ring1")
+    end
+    if no_swap_gear:contains(player.equipment.right_ring) then
+        disable("ring2")
+    else
+        enable("ring2")
+    end
+end
+
+windower.register_event('zone change',
+    function()
+        if no_swap_gear:contains(player.equipment.left_ring) then
+            enable("ring1")
+            equip(sets.idle)
+        end
+        if no_swap_gear:contains(player.equipment.right_ring) then
+            enable("ring2")
+            equip(sets.idle)
+        end
+    end
+)
 
 -- Select default macro book on initial load or subjob change.
 function select_default_macro_book()
