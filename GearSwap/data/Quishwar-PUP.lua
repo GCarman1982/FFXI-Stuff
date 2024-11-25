@@ -378,7 +378,7 @@ function init_gear_sets()
         range=Animator.WS,
         head=gear.Mpaca_head,
         body=Artifact_Foire.Body_WSD_PTank,
-        hands=gear.Herc_Ws_MAB_hands,
+        hands=gear.Herc_WS_MAB_hands,
         legs="Hiza. Hizayoroi +2",
         feet=gear.Mpaca_feet,
         neck="Shulmanu Collar",

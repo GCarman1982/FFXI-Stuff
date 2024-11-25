@@ -31,7 +31,7 @@ function define_global_sets()
     gear.Malignance_feet = {name="Malignance Boots"}
 
     -- Herc set
-    gear.Herc_Ws_MAB_hands = {name="Herculean Gloves", augments={'"Mag.Atk.Bns."+5','Weapon skill damage +5%','INT+9'}}
+    gear.Herc_WS_MAB_hands = {name="Herculean Gloves", augments={'"Mag.Atk.Bns."+5','Weapon skill damage +5%','INT+9'}}
 
     -- Taeon pet set
     gear.Taeon_pet_head = {name="Taeon Chapeau", augments={'Pet: Attack+25 Pet: Rng. Acc.+25'}}
@@ -92,8 +92,6 @@ function define_global_sets()
     gear.Hizamaru_Ambuscade_legs = {name="Hizamaru Hizayoroi +2"}
     gear.Hizamaru_Ambuscade_feet = {name="Hizamaru Sune-Ate +2"}
 end
-
-
 
 laggy_zones = S{'Al Zahbi', 'Aht Urhgan Whitegate', 'Eastern Adoulin', 'Mhaura', 'Nashmau', 'Selbina', 'Western Adoulin'}
 
