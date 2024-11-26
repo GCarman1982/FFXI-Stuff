@@ -352,7 +352,7 @@ function init_gear_sets()
 
     sets.precast.JA.Maneuver = {
         neck = "Buffoon's Collar",
-        body = gear.Empy_Karagoz.Body_Overload,
+        body = Empy_Karagoz.Body_Overload,
         hands = Artifact_Foire.Hands_Mane_Overload,
         ear1 = "Burana Earring",
         back = "Visucius's Mantle"
@@ -375,7 +375,6 @@ function init_gear_sets()
     -- Weaponskill sets
     -- Default set for any weaponskill that isn't any more specifically defined
     sets.precast.WS = {
-        range=Animator.WS,
         head=gear.Mpaca_head,
         body=Artifact_Foire.Body_WSD_PTank,
         hands=gear.Herc_WS_MAB_hands,
@@ -725,7 +724,7 @@ function init_gear_sets()
          body=gear.Taeon_pet_body,
          hands=gear.Taeon_pet_hands,
          legs=gear.Taeon_pet_legs,
-         feet=gar.Taeon_pet_feet,
+         feet=gear.Taeon_pet_feet,
          neck="Shulmanu Collar",
          waist="Klouskap Sash",
          left_ear="Rimeice Earring",
@@ -874,8 +873,9 @@ function init_gear_sets()
     sets.defense.PetMDT = set_combine(sets.pet.EmergencyDT, {})
 end
 
-function job_handle_update(playerStatus, eventArgs)
+function job_handle_equipping_gear(playerStatus, eventArgs)
     check_gear()
+    update_animators()
 end
 
 function check_gear()
@@ -891,6 +891,7 @@ function check_gear()
     end
 end
 
+
 windower.register_event('zone change',
     function()
         if no_swap_gear:contains(player.equipment.left_ring) then
@@ -901,8 +902,36 @@ windower.register_event('zone change',
             enable("ring2")
             equip(sets.idle)
         end
+
+        -- show or hide acutocontrol on area change
+        if areas.Cities:contains(world.area) then
+            send_command('acon hide')
+        else
+            send_command('acon show')
+        end
+
     end
 )
+
+function update_animators()
+    if state.PetModeCycle.value == 'TANK' then
+        equip(set_combine(sets.engaged.MasterPet, {
+            range = Animators.Melee
+        }))
+    elseif state.PetModeCycle.value == 'MAGE' then
+        equip(set_combine(sets.engaged.MasterPet, {
+            range = Animators.Range
+        }))
+    elseif state.PetModeCycle.value == 'DD' then
+        equip(set_combine(sets.engaged.MasterPet, {
+            range = Animators.Ranged
+        }))
+    else
+        equip(sets.engaged.MasterPet, {
+            range = Animators.Melee
+        })
+    end
+end
 
 -- Select default macro book on initial load or subjob change.
 function select_default_macro_book()

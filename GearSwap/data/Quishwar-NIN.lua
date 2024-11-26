@@ -100,10 +100,6 @@ function user_setup()
 
     options.ninja_tool_warning_limit = 10
 
-    -- Additional local binds
-    include('Global-Binds.lua') -- OK to remove this line
-    include('Global-GEO-Binds.lua') -- OK to remove this line
-
     send_command('bind @t gs c cycle treasuremode')
     send_command('bind !` gs c toggle MagicBurst')
     send_command('bind ^- input /ja "Yonin" <me>')
@@ -1180,11 +1176,11 @@ windower.register_event('zone change',
 function select_default_macro_book()
     -- Default macro set/book
     if player.sub_job == 'DNC' then
-        set_macro_page(2, 11)
+        set_macro_page(1, 4)
     elseif player.sub_job == 'THF' then
-        set_macro_page(3, 11)
+        set_macro_page(3, 4)
     else
-        set_macro_page(1, 11)
+        set_macro_page(2, 4)
     end
 end
 
