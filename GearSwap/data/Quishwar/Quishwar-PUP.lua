@@ -45,7 +45,7 @@ function user_setup()
         Used when you are Engaged with Pet
         Used when you are Idle and Pet is Engaged
     ]]
-    state.HybridMode:options("Normal", "Tank", "Acc", "TP", "DT", "Regen", "Ranged")
+    state.HybridMode:options("Normal", "Tank", "Acc", "TP", "Regen", "Ranged")
 
     --[[
         Alt-F12 - Turns off any emergency mode
@@ -148,7 +148,7 @@ function user_setup()
     --[[ 
         This will toggle the CP Mode 
         //gs c toggle CP 
-    ]] 
+    ]]
     state.CP = M(false, "CP")
     CP_CAPE = gear.Capacity_Cape
 
@@ -158,7 +158,7 @@ function user_setup()
         certain pieces to change.
 
         //gs c toggle customgearlock
-        ]]
+    ]]
     state.CustomGearLock = M(false, "Custom Gear Lock")
     --Example customGearLock = T{"head", "waist"}
     customGearLock = T{}
@@ -174,15 +174,15 @@ function user_setup()
     send_command("bind home gs c toggle setftp")
     send_command("bind PAGEUP gs c toggle autodeploy")
     send_command("bind PAGEDOWN gs c hide keybinds")
-    send_command("bind end gs c toggle CP") 
+    send_command("bind end gs c toggle CP")
     send_command("bind = gs c clear")
 
     select_default_macro_book()
     set_lockstyle()
 
     -- Adjust the X (horizontal) and Y (vertical) position here to adjust the window
-    pos_x = 0
-    pos_y = 0
+    pos_x = 2300
+    pos_y = 200
     setupTextWindow(pos_x, pos_y)
     
 end
@@ -234,7 +234,7 @@ function init_gear_sets()
     ]]
     Animators = {"Animator P", "Animator P II", "Neo Animator"}
     Animators.Range = "Animator P II"
-    Animators.Melee = "Animator P"
+    Animators.Melee = "Animator P +1"
     Animators.WS = "Neo Animator"
 
     --Adjust to your reforge level
@@ -250,11 +250,11 @@ function init_gear_sets()
     Relic_Pitre.Head_PRegen = "Pitre Taj +1" --Enhances Optimization
     Relic_Pitre.Body_PTP = "Pitre Tobe +1" --Enhances Overdrive
     Relic_Pitre.Hands_WSD = "Pitre Dastanas +1" --Enhances Fine-Tuning
-    Relic_Pitre.Legs_PMagic = "Pitre Churidars +2" --Enhances Ventriloquy
-    Relic_Pitre.Feet_PMagic = "Pitre Babouches +1" --Role Reversal
+    Relic_Pitre.Legs_PMagic = "Pantin Churidars +2" --Enhances Ventriloquy
+    Relic_Pitre.Feet_PMagic = "Pantin Babouches +1" --Role Reversal
 
     Empy_Karagoz = {}
-    Empy_Karagoz.Head_PTPBonus = "Karagoz Capello"
+    Empy_Karagoz.Head_PTPBonus = "Karagoz Capello +1"
     Empy_Karagoz.Body_Overload = "Karagoz Farsetto"
     Empy_Karagoz.Hands = "Karagoz Guanti"
     Empy_Karagoz.Legs_Combat = "Karagoz Pantaloni"
@@ -378,7 +378,7 @@ function init_gear_sets()
         head=gear.Mpaca_head,
         body=Artifact_Foire.Body_WSD_PTank,
         hands=gear.Herc_WS_MAB_hands,
-        legs="Hiza. Hizayoroi +2",
+        legs=gear.Hizamaru_Ambuscade_legs,
         feet=gear.Mpaca_feet,
         neck="Shulmanu Collar",
         waist="Grunfeld Rope",
@@ -398,7 +398,7 @@ function init_gear_sets()
         feet=gear.Mpaca_feet,
         neck="Shulmanu Collar",
         waist=gear.Elemental_belt,
-        left_ear="Moonshade Earring",
+        left_ear=gear.Moonshade_Earring,
         right_ear="Cessance Earring",
         left_ring="Refescent Ring",
         right_ring="Niqmaddu Ring"
@@ -413,7 +413,7 @@ function init_gear_sets()
         legs=gear.Mpaca_legs,
         feet=gear.Mpaca_feet,
         neck="Shulmanu Collar",
-        left_ear="Moonshade Earring",
+        left_ear=gear.Moonshade_Earring,
         right_ear="Cessance Earring",
         left_ring="Refescent Ring",
         right_ring="Niqmaddu Ring"
@@ -428,7 +428,7 @@ function init_gear_sets()
         feet=gear.Mpaca_feet,
         neck="Shulmanu Collar",
         waist=gear.Elemental_belt,
-        left_ear="Moonshade Earring",
+        left_ear=gear.Moonshade_Earring,
         right_ear="Cessance Earring",
         left_ring="Refescent Ring",
         right_ring="Niqmaddu Ring"
@@ -505,7 +505,9 @@ function init_gear_sets()
         Offense Mode = Master
         Hybrid Mode = TP
     ]]
-    sets.engaged.Master.TP = set_combine(sets.engaged.Master, {})
+    sets.engaged.Master.TP = set_combine(sets.engaged.Master, {
+        head=gear.Malignance_head
+    })
 
     -------------------------------------DT
     --[[
@@ -543,7 +545,19 @@ function init_gear_sets()
         Offense Mode = MasterPet
         Hybrid Mode = Normal
     ]]
-    sets.engaged.MasterPet = set_combine(sets.engaged.Master, {})
+    sets.engaged.MasterPet = {
+        head=gear.Malignance_head,
+        body=gear.Mpaca_body,
+        hands=gear.Heyoka_hands,
+        legs=gear.Mpaca_legs,
+        feet=gear.Taliah_Ambuscade_feet,
+        neck="Shulmanu Collar",
+        left_ring="Varar Ring",
+        right_ring="Niqmaddu Ring",
+        left_ear="Telos Earring",
+        right_ear="Cessance Earring",
+        back=Visucius.PetDD
+    }
 
     -------------------------------------Acc
     --[[
@@ -558,16 +572,16 @@ function init_gear_sets()
         Hybrid Mode = TP
     ]]
     sets.engaged.MasterPet.TP = {
-        head=gear.Heyoka_head,
+        head=gear.Malignance_head,
         body=gear.Mpaca_body,
         hands=gear.Heyoka_hands,
-        legs=gear.Heyoka_legs,
+        legs=gear.Taliah_Ambuscade_legs,
         feet=gear.Mpaca_feet,
         neck="Shulmanu Collar",
         waist="Klouskap Sash",
         left_ear="Telos Earring",
         right_ear="Cessance Earring",
-        left_ring="Hetairoi Ring",
+        left_ring="Raja's Ring",
         right_ring="Niqmaddu Ring",
         back=Visucius.PetDD
     }
@@ -603,15 +617,28 @@ function init_gear_sets()
 
     -------------------------------------Magic Midcast
     sets.midcast.Pet = {
-       -- Add your set here 
+        left_ear="Burana Earring",
+        left_ring="Thurandaut Ring",
+        right_ring="Niqmaddu Ring",
+        back=Visucius.PetRegen
     }
 
     sets.midcast.Pet.Cure = {
-       -- Add your set here 
+        head={ name="Naga Somen", augments={'Pet: MP+80','Automaton: "Cure" potency +4%','Automaton: "Fast Cast"+3',}},
+        body={ name="Naga Samue", augments={'Pet: MP+80','Automaton: "Cure" potency +4%','Automaton: "Fast Cast"+3',}},
+        hands={ name="Naga Tekko", augments={'Pet: MP+75','Automaton: "Cure" potency +3%','Automaton: "Fast Cast"+2',}},
+        legs=Artifact_Foire.Legs_PCure,
+        feet={ name="Naga Kyahan", augments={'Pet: MP+50','Automaton: "Cure" potency +2%','Automaton: "Fast Cast"+1',}},
+        back=Visucius.PetRegen
     }
 
     sets.midcast.Pet["Healing Magic"] = {
-       -- Add your set here 
+        head={ name="Naga Somen", augments={'Pet: MP+80','Automaton: "Cure" potency +4%','Automaton: "Fast Cast"+3',}},
+        body={ name="Naga Samue", augments={'Pet: MP+80','Automaton: "Cure" potency +4%','Automaton: "Fast Cast"+3',}},
+        hands={ name="Naga Tekko", augments={'Pet: MP+75','Automaton: "Cure" potency +3%','Automaton: "Fast Cast"+2',}},
+        legs=Artifact_Foire.Legs_PCure,
+        feet={ name="Naga Kyahan", augments={'Pet: MP+50','Automaton: "Cure" potency +2%','Automaton: "Fast Cast"+1',}},
+        back=Visucius.PetRegen
     }
 
     sets.midcast.Pet["Elemental Magic"] = {
@@ -675,8 +702,8 @@ function init_gear_sets()
         body=gear.Heyoka_body,
         hands=gear.Heyoka_hands,
         legs=gear.Heyoka_legs,
-        feet=gear.Heyoka_feet,
-        left_ear="Rimeice Earring",
+        feet=gear.Taliah_Ambuscade_feet,
+        left_ear="Rimeice Earring"
     }
 
     --[[
@@ -745,17 +772,14 @@ function init_gear_sets()
         Idle Mode = Idle
         Hybrid Mode = TP
     ]]
-    sets.idle.Pet.Engaged.TP = {
-       -- Add your set here 
-    }
-
-    --[[
-        Idle Mode = Idle
-        Hybrid Mode = DT
-    ]]
-    sets.idle.Pet.Engaged.DT = set_combine(sets.idle.Pet.Engaged.Tank, {
-        back=Visucius.PetRegen
-       })
+    sets.idle.Pet.Engaged.TP = set_combine(sets.idle.Pet.Engaged, {
+       head = gear.Taliah_Ambuscade_head,
+       body = Relic_Pitre.Body_PTP,
+       hands = gear.Heyoka_hands,
+       legs = gear.Taliah_Ambuscade_legs,
+       feet = gear.Taeon_pet_feet,
+       right_ear = "Burana Earring"
+    })
 
     --[[
         Idle Mode = Idle
@@ -785,7 +809,8 @@ function init_gear_sets()
         WSNoFTP is the default weaponskill set used
     ]]
     sets.midcast.Pet.WSNoFTP = {
-        head = Empy_Karagoz.Head_PTPBonus
+        head =Empy_Karagoz.Head_PTPBonus,
+        hands =gear.Mpaca_hands
     }
 
     --[[
@@ -793,7 +818,8 @@ function init_gear_sets()
         then this set will be equipped
     ]]
     sets.midcast.Pet.WSFTP = {
-        head = Empy_Karagoz.Head_PTPBonus
+        head =Empy_Karagoz.Head_PTPBonus,
+        hands =gear.Mpaca_hands
     }
 
     --[[
@@ -806,7 +832,7 @@ function init_gear_sets()
         hands=gear.Mpaca_hands,
         legs=gear.Nyame_hands,
         feet=gear.Mpaca_feet,
-        neck="Shulmanu Collar",
+        neck="Deino Collar",
         waist="Klouskap Sash",
         left_ear="Burana Earring",
         right_ear="Handler's Earring +1",
@@ -863,7 +889,9 @@ function init_gear_sets()
 
     -- Resting sets
     sets.resting = {
-       -- Add your set here
+       left_ear = "Infused Earring",
+       neck = "Bathy Choker",
+       head = Relic_Pitre.Head_PRegen
     }
 
     sets.defense.MasterDT = sets.idle.MasterDT
@@ -903,6 +931,12 @@ windower.register_event('zone change',
             equip(sets.idle)
         end
 
+        if areas.Adoulin:contains(world.area) then
+            equip(sets.idle.Town.Adoulin)
+        else
+            equip(sets.idle.Town)
+        end
+
         -- show or hide acutocontrol on area change
         if areas.Cities:contains(world.area) then
             send_command('acon hide')
@@ -914,7 +948,7 @@ windower.register_event('zone change',
 )
 
 function update_animators()
-    if state.PetModeCycle.value == 'TANK' then
+    if state.PetModeCycle.value == 'TANK' or state.PetModeCycle.value == 'DD' and state.PetStyleCycle.value == 'BONE' then
         equip(set_combine(sets.engaged.MasterPet, {
             range = Animators.Melee
         }))
@@ -956,7 +990,7 @@ function set_lockstyle()
     elseif player.sub_job == "DNC" then
         lockstyleset = 1
     else
-        lockstyleset = 3
+        lockstyleset = 1
     end
     send_command('wait 2; input /lockstyleset ' .. lockstyleset)
 end
